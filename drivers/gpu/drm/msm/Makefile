@@ -57,7 +57,6 @@ msm_drm-y := \
 
  msm_drm-$(CONFIG_DEBUG_FS) += sde_dbg.o \
 	sde_dbg_evtlog.o \
-	xiaomi_frame_stat.o
 
 msm_drm-$(CONFIG_DRM_MSM_KCAL_CTRL) += sde/sde_hw_kcal_ctrl.o
 
