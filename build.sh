@@ -5,8 +5,8 @@
 
 # Initialize flags for options
 clean=false
-local=false
-suonly=false
+local=true
+suonly=true
 
 # Use getopt for parsing long and short options
 while [[ $# -gt 0 ]]; do
@@ -82,7 +82,20 @@ fi
 
 if [ "$suonly" = true ]; then
 	echo -e "\nNot compiling NSU image..."
-	echo -e "\nKernel compiled successfully! Zipping up...\n"
+	echo -e "\nKernel compiled successfully! Patching for KPM..\n"
+	cd out/arch/arm64/boot
+	wget https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.12.0/patch_linux
+	chmod +x patch_linux && ./patch_linux
+	if [ -e oImage ]; then
+		rm Image.gz Image
+		mv oImage Image
+		gzip -9 -c Image > Image.gz
+	else
+		echo -e "\nKernel patch failed! Aborting..."
+		exit 1
+	fi
+	cd -
+	echo -e "\nKernel patched successfully! Zipping up...\n"
 	if [ -d "$AK3_DIR" ]; then
 		cp -r $AK3_DIR AnyKernel3
 	else
